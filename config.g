@@ -29,7 +29,7 @@ M350 X256 Y256 Z16 E16 I1						; Configure microstepping with interpolation
 M92 X694.444 Y694.444 Z2552.48 E568.62 ;U150			; Set steps per degree and per mm (Duet)
 M566 X300.00 Y300.00 Z60.00 E600 ;U600				; Set maximum instantaneous speed changes (mm/min)
 ;M203 X15000.00 Y15000.00 Z600 E6000.00			; Set maximum speeds (mm/min)
-M203 X9000.00 Y9000.00 Z600 E6000.00 ;U9000			; Set maximum speeds (mm/min)
+M203 X5000.00 Y5000.00 Z600 E6000.00 ;U9000			; Set maximum speeds (mm/min)
 M201 X10000.00 Y10000.00 Z30.00 E50 ;U5000				; Set accelerations (mm/s^2)
 M906 X1000 Y1000 Z500 E600 I50				    ; Set motor currents (mA) and motor idle factor in per cent
 M84 S300											; Set idle timeout
@@ -71,11 +71,10 @@ M280 P0 S160						            ; Reset BLTouch
 
 ;________________________________________________________________________ (NEW)
 ; Duet3D Scanning Z Probe
-M558 K1 P11 C"120.i2c.ldc1612" F8000 T8000    ; configure SZP as probe 1, type 11, on CAN address 120
+M558 K1 P11 C"120.i2c.ldc1612" H10 F8000 T8000  ; configure SZP as probe 1, type 11, on CAN address 120
 M308 A"SZP coil" S10 Y"thermistor" P"120.temp0" ; thermistor on SZP coil
-G31 K1 Z12                                      ; define probe 1 offsets and trigger height
+G31 K1 Z8                                       ; define probe 1 offsets and trigger height
 M558.2 K1 S20 R164359                           ; set drive current and reading offset
-M557 X30:520 Y40:250 P7:8                       ; define printing grid
 
 ;________________________________________________________________________
 ;This is a standard single printer setup, send M557 with values if not a standard setup.(or macro call)
