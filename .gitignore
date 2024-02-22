@@ -1,0 +1,3 @@
+#git ignore difference.txt
+**/heightmaps/difference.txt
+
