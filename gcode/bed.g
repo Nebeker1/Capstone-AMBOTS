@@ -5,12 +5,16 @@ M118 P0  S"bed.g" L3
 G90                                                               ; absolute positioning
 M561                                                              ; Cancel any existing bed compensation
 
-if exists(param.k) & param.k=1
+G29 S2 ; Disable bed mesh compensation
+
+if exists(param.K) & param.K=1
   if fileexists("0:/sys/AMB/Calibration/AMB_ScaraConfig_SZP.g")
     M98 P"0:/sys/AMB/Calibration/AMB_ScaraConfig_SZP.g"           ; Call the custom M669 parameters for the Scanning Z Probe.
+    echo "SZP"
 else 
   if fileexists("0:/sys/AMB/Calibration/AMB_ScaraConfig_BLTouch.g")
-    M98 P"0:/sys/AMB/Calibration/AMB_ScaraConfig_BLTouch.g"           ; Call the custom M669 parameters for the Scanning Z Probe.
+    M98 P"0:/sys/AMB/Calibration/AMB_ScaraConfig_BLTouch.g"       ; Call the custom M669 parameters for the Scanning Z Probe.
+    echo "BLTouch"
 M98 P"0:/sys/homeall_NoPark.g"                                    ; Home all - Does G28 but doesn't park the arm
 
 ;M557 is done in config.g for standard printer,
@@ -20,7 +24,7 @@ G1 F200
 G1 z20  
 G1 F3000 
  
-M203 X2000.00 Y2000.00 Z200 E6000.00                              ; Scan Speeds (Slow)                          
+M203 X3000.00 Y3000.00 Z200 E6000.00                              ; Scan Speeds (Slow)                          
 
 
 ;---------------------------------------------------------------------------
@@ -30,9 +34,9 @@ G1 X40 Y40 F8000
 G30
 if exists(param.K) & param.K=1
   G1 Z6                                                           ; to avoid backlash
-  M558.1 K1 S4                                                    ; This handles the reading v. height calibration. May need to change S value depending on trigger height from config file (G31 Z##).
+  M558.1 K1 S2.7                                                  ; This handles the reading v. height calibration. May need to change S value depending on trigger height from config file (G31 Z##).
 G29 S0 K{exists(param.K) ? param.K : 0}                           ; Call bed leveling using SZP
-G1 X0 Y-150 F18000
+G1 Z10 F18000
 
 ; END of Scanning Z Probe Bed Leveling
 ;---------------------------------------------------------------------------
