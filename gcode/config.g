@@ -73,8 +73,13 @@ M280 P0 S160						            ; Reset BLTouch
 ; Duet3D Scanning Z Probe
 M558 K1 P11 C"120.i2c.ldc1612" H10 F8000 T8000  ; configure SZP as probe 1, type 11, on CAN address 120
 M308 A"SZP coil" S10 Y"thermistor" P"120.temp0" ; thermistor on SZP coil
-G31 K1 Z8                                       ; define probe 1 offsets and trigger height
-M558.2 K1 S20 R164359                           ; set drive current and reading offset
+G31 K1 Z4                                       ; define probe 1 offsets and trigger height
+M558.2 K1 S20 R166740                           ; set drive current and reading offset
+
+;________________________________________________________________________ (NEW)
+; Duet3D IR Probe
+M558 K2 P8 C"^io1.in" H10 F1200 T8000           ; configure IR sensor as probe 2, type 8 digital probe unfiltered, on address io1.in pin.
+G31 K2 P50 Z1                                   ; configures trigger threshold to be 50, Z offset (MAY NEED TO ADJUST LATER)
 
 ;________________________________________________________________________
 ;This is a standard single printer setup, send M557 with values if not a standard setup.(or macro call)
@@ -124,12 +129,12 @@ M911 S10 R11 P"M913 X0 Y0 G91 M83 G1 Z3 E-5 F1000" ; set voltage thresholds and 
 ; Power Loss
 M911 S21.0 R28 P"M913 X0 Y0 M5005" ; set voltage thresholds and actions to run on power loss
 
-M950 P5 C"io0.out" 
-M950 P6 C"io1.out" 
-M42 P5 S0
-M42 P6 S0
-M950 J7 C"^io0.in" 
-M950 J8 C"^io1.in" 
+;M950 P5 C"io0.out" 
+;M950 P6 C"io1.out" 
+;M42 P5 S0
+;M42 P6 S0
+;M950 J7 C"^io0.in" 
+;M950 J8 C"^io1.in" 
  
 
 ;----------------------------------------------------------------------- 
@@ -137,11 +142,11 @@ M950 J8 C"^io1.in"
  
 ;Motor 1 Driver Failure 
  
-M581 P7 S0 T5 R0 ; invoke trigger 5 when an active-to-inactive edge is detected on input     at anytime
+;M581 P7 S0 T5 R0 ; invoke trigger 5 when an active-to-inactive edge is detected on input     at anytime
 
 ;Motor 2 Driver Failure
  
-M581 P8 S0 T6 R0 ; invoke trigger 6 when an active-to-inactive edge is detected on input   at anytime
+;M581 P8 S0 T6 R0 ; invoke trigger 6 when an active-to-inactive edge is detected on input   at anytime
  
 
 M501                                               ; load saved parameters from non-volatile memory
