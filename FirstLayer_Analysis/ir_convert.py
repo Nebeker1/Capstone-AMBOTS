@@ -69,9 +69,11 @@ while now != "; prusaslicer_config = end\n":
         # Ensures add location isn't changed
         layer_change_count == 3
 
+readingfile.close()
+
 # Return the original file back to gcode
 os.rename(txt_file_name, file_original)
-readingfile.close()
+
 
 # New file name is original with additional text
 new_file_name = original_string + '_ir_convert.gcode'
