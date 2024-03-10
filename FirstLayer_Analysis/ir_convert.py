@@ -52,11 +52,97 @@ now = " "
 # Line number of current text
 line_number = 0
 
-# Run tell final message line
+minY = 9999
+minX = 9999
+maxX = 0
+maxY = 0
+countG = 0
+
+xValue = 0
+yValue = 0
+
+xValuesList = []
+yValuesList = []
+
+readingX = False
+readingY = False
+endReadingXY = False
+startReadingXY = False
+mainShape = False
+
+# Select random points for the IR to probe
+randomPoints = []
+
+
+# Read until final message line
 while now != "; prusaslicer_config = end\n":
 
     now = str(readingfile.readline())
     text_list.append(now)
+    
+    if now == ";END gcode for filament\n":
+        endReadingXY = True
+        
+    if now == ";TYPE:Perimeter\n":
+        mainShape = True
+        
+    
+    if endReadingXY == False and mainShape == True:
+        for x in range (0, len(now)):
+        
+            if readingX == True and now[x] == ' ':
+            
+                readingX = False
+        
+            if readingX == True:
+                xValuesList.append(now[x])
+        
+            if now[x] == 'X':
+                readingX = True
+                
+                
+            if readingY == True and now[x] == ' ' or now [x] == '\n':
+                readingY = False
+        
+            if readingY == True:
+                yValuesList.append(now[x])
+        
+            if now[x] == 'Y' and now[x+1].isnumeric() == True:
+                readingY = True
+    
+    
+    if len(xValuesList) > 0:
+        startReadingXY = True
+        xValue = ''.join(xValuesList)
+        xValue = float(xValue)
+        xValuesList.clear()
+        
+    
+    if len(yValuesList) > 0:
+        startReadingXY = True
+        yValue = ''.join(yValuesList)
+        yValue = float(yValue)
+        yValuesList.clear()
+        
+    
+    if endReadingXY == False and startReadingXY == True and line_number % 40 == 0:
+        
+        if (xValue,yValue) not in randomPoints:
+            randomPoints.append((xValue,yValue))
+    
+
+    if xValue > maxX and endReadingXY == False and startReadingXY == True:
+        maxX = xValue
+        
+    if xValue < minX and endReadingXY == False and startReadingXY == True:
+        minX = xValue
+        
+    if yValue > maxY and endReadingXY == False and startReadingXY == True:
+        maxY = yValue
+        
+    if yValue < minY and endReadingXY == False and startReadingXY == True:
+        minY = yValue
+    
     
     # Count Layer Change
     if now == ";LAYER_CHANGE\n":
@@ -70,6 +156,15 @@ while now != "; prusaslicer_config = end\n":
         layer_change_count == 3
 
 readingfile.close()
+
+print("Max X value: " + str(maxX))
+print("Min X value: " + str(minX))
+
+print("Max Y value: " + str(maxY))
+print("Min Y value: " + str(minY))
+
+# Define random points to scan
+#print(randomPoints)
 
 # Return the original file back to gcode
 os.rename(txt_file_name, file_original)
