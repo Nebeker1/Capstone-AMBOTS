@@ -62,37 +62,52 @@ class Heightmap(object):
 		#plot the heightmap
 		fig = plt.figure()
 		ax = fig.add_subplot(111, projection='3d')
-		ax.plot_wireframe(X, Y, Z, cmap='viridis')
+		ax.plot_surface(X, Y, Z, cmap='viridis')
 		plt.show()
 		pass
 
-# def find_difference_two_arrays(arr1, arr2):
-# 	#find the difference of the two arrays
-# 	diff = []
-# 	for i in range(len(arr_szp)):
-# 		row = []
-# 		for j in range(len(arr_szp[i])):
-# 			row.append(arr_szp[i][j] - arr_blt[i][j])
-# 		diff.append(row)
+def find_difference_two_arrays(arr1, arr2):
+	#find the difference of the two arrays
+	diff = []
+	for i in range(len(arr1)):
+		row = []
+		for j in range(len(arr1[i])):
+			row.append(arr1[i][j] - arr2[i][j])
+		diff.append(row)
 
-# 	#write the difference to a file
-# 	file = open('.\heightmaps\Difference.txt', 'w')
-# 	for i in range(len(diff)):
-# 		for j in range(len(diff[i])):
-# 			diff[i][j] = round(diff[i][j], 4)
-# 			file.write(str(diff[i][j]) + ', ')
-# 		file.write('\n')
-# 	file.close()
-# 	print('done')
+	#write the difference to a file
+	file = open('.\heightmaps\Difference.txt', 'w')
+	for i in range(len(diff)):
+		for j in range(len(diff[i])):
+			diff[i][j] = round(diff[i][j], 4)
+			file.write(str(diff[i][j]) + ', ')
+		file.write('\n')
+	#find the average difference
+	avg = 0
+	for i in range(len(diff)):
+		for j in range(len(diff[i])):
+			avg += abs(diff[i][j])
+	avg = avg / (len(diff) * len(diff[0]))
+	file.write('Average: ' + str(avg))
+	file.close()
+	print('done')
 
 absolute_path = os.path.dirname(__file__)
-BLTouch_relative_path = "heightmaps/Bltouch_HeightMap.txt"
-BLTouch_hm_path = os.path.join(absolute_path, BLTouch_relative_path)
 
-heightmap = Heightmap(BLTouch_hm_path)
-heightmap.read_z_points()
-heightmap.read_info()
-heightmap.generate_heightmap()
+#add heightmap files
+BLTouch_relative_path = "heightmaps/heightmap1.csv"
+SZP_relative_path = "heightmaps/heightmap3.csv"
+BLTouch_hm_path = os.path.join(absolute_path, BLTouch_relative_path)
+SZP_hm_path = os.path.join(absolute_path, SZP_relative_path)
+
+heightmap_blt = Heightmap(BLTouch_hm_path)
+heightmap_szp = Heightmap(SZP_hm_path)
+heightmap_blt.read_z_points()
+heightmap_blt.read_info()
+heightmap_szp.read_z_points()
+heightmap_szp.read_info()
+find_difference_two_arrays(heightmap_blt.z_points, heightmap_szp.z_points)
+heightmap_szp.generate_heightmap()
 
 #read the file and print result
 # arr_szp = read_file('.\heightmaps\SZP_HeightMap.txt')
