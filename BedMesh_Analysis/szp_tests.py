@@ -7,7 +7,7 @@ DUET_IP = '192.168.0.136'
 
 SZP_ABL_CMD = 'G32 K1'
 BLTOUCH_ABL_CMD = 'G32 K0'
-ITERATIONS = 10
+ITERATIONS = 1
 
 if __name__ == "__main__":
 	absolute_path = os.path.dirname(__file__)
@@ -16,6 +16,7 @@ if __name__ == "__main__":
 	last_seq = get_reply_sequence(DUET_IP)
 	current_seq = last_seq
 	response = ''
+	coefficients = ''
 	iterations = ITERATIONS
 	while iterations > 0:
 		idle = False
@@ -40,7 +41,9 @@ if __name__ == "__main__":
 				# check if the scan was successful
 				elif response.find('Height map saved') != -1:
 					print('Command successful')
-				
+
+				elif response.find('coefficients') != -1:
+					coefficients = response
 				# check if the printer is idle
 				if get_duet_status(DUET_IP).get('status', None) == 'I':
 					print('Duet is idle')
@@ -48,4 +51,8 @@ if __name__ == "__main__":
 		# download the heightmap, and decrement the iterations
 		file_path = os.path.join(save_path, f'heightmap_{iterations}.csv')
 		download_file(DUET_IP, '/sys/heightmap.csv', file_path)
+		#append the coefficients to the file
+		file = open(file_path, 'a')
+		file.write(coefficients)
+		file.close()
 		iterations -= 1
