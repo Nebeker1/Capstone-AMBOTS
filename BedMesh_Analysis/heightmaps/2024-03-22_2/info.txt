@@ -1,0 +1,16 @@
+Heightmap Information
+Date: 2024-03-22
+Time: 17:22:47
+End Time: 17:46:00
+Number Of Scans: 10
+Probe Type: SZP
+Points Probed: 192
+Trigger Height: 5
+M558.1: M558.1 K1 S2.7
+Probe Speed: M203 X5000.00 Y5000.00 Z200 E6000.00
+Drive Level: 20
+Offset: 166740
+Bed Material: New Metal Sheet
+
+Other Notes:
+Metal Sheet is very warped, Binder clips are needed to hold corners of bed

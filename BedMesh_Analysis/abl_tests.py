@@ -8,7 +8,7 @@ DUET_IP = '192.168.0.136'
 
 SZP_ABL_CMD = 'G32 K1'
 BLTOUCH_ABL_CMD = 'G32 K0'
-ITERATIONS = 1
+ITERATIONS = 10
 
 def check_connection(duet_ip):
 	#check if connection to duet can be established
@@ -28,7 +28,8 @@ def create_info_file(save_path):
 		file.write('Probe Type: _____' + '\n')
 		file.write('Points Probed: _____' + '\n')
 		file.write('Trigger Height: _____' + '\n')
-		file.write('Feed Rate: _____' + '\n')
+		file.write('M558.1: _____' + '\n')
+		file.write('Probe Speed: _____' + '\n')
 		file.write('Drive Level: _____' + '\n')
 		file.write('Offset: _____' + '\n')
 		file.write('Bed Material: _____' + '\n')
@@ -79,7 +80,7 @@ def perform_abl(duet_ip, abl_cmd, save_path, itr):
 				coefficients = response
 		
 		# check if the printer is idle. indicates that the scan is complete
-		if get_duet_status(duet_ip).get('status', None) == 'I':
+		if get_duet_status(duet_ip).get('status', {}) == 'I':
 			print('Duet is idle, command complete')
 			break
 	# download the heightmap, and decrement the iterations
@@ -87,7 +88,6 @@ def perform_abl(duet_ip, abl_cmd, save_path, itr):
 
 
 if __name__ == "__main__":
-	create_save_path()
 	if check_connection(DUET_IP):
 		save_path = create_save_path()
 		if save_path is not None:
