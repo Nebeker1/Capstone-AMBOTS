@@ -16,7 +16,6 @@ def connect_to_duet(duet_ip):
 	params = {
 		'password': 'reprap',  # Default password, replace if custom
 		'time': current_time, 
-		'sessionTimeout': 0  # Disable timeout
 	}
 	try:
 		response = requests.get(url, params=params)
@@ -98,11 +97,12 @@ def send_gcode_command(duet_ip, gcode):
 		print(f"Error sending G-Code to Duet: {e}")
 		return None
 
-if __name__ == "__main__":		
+if __name__ == "__main__":
+	pass	
 	# print(send_gcode_command(DUET_IP, 'M115'))
 	# print(get_reply_sequence(DUET_IP))
 	# print(recieve_reply(DUET_IP))
 	# print(connect_to_duet(DUET_IP))
 	# print(get_duet_status(DUET_IP))
-	print(download_file(DUET_IP, '/sys/heightmap.csv', 'saved_heightmap.csv'))
+	# print(download_file(DUET_IP, '/sys/heightmap.csv', 'saved_heightmap.csv'))
 	# print(disconnect_from_duet(DUET_IP))
