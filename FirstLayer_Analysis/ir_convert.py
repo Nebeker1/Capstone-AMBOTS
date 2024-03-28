@@ -38,7 +38,7 @@ readingfile = open(txt_file_name)
 text_list = []
 
 # Gcode text to run IR probe
-ir_probe_text = ["\n","Place new Gcode Here for First Layer","\n","\n"]
+ir_probe_text = ["\n"]
 
 # Variable to hold number of layer changes
 layer_change_count = 0
@@ -157,11 +157,30 @@ while now != "; prusaslicer_config = end\n":
 
 readingfile.close()
 
+maxX = round(maxX,0)
+maxX = int(maxX)
+
+minX = round(minX,0)
+minX = int(minX)
+
+maxY = round(maxY,0)
+maxY = int(maxY)
+
+minY = round(minY,0)
+minY = int(minY)
+
+
 print("Max X value: " + str(maxX))
 print("Min X value: " + str(minX))
 
 print("Max Y value: " + str(maxY))
 print("Min Y value: " + str(minY))
+
+bed_size = "M557 X" + str(minX) + ":" + str(maxX) + " Y" + str(minY) + ":" + str(maxY) + " P24:8"
+ir_probe_text.append(bed_size)
+ir_probe_text.append("\n")
+ir_probe_text.append("G32 K2")
+ir_probe_text.append("\n")
 
 # Define random points to scan
 #print(randomPoints)
