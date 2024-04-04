@@ -5,6 +5,7 @@
 import requests
 import datetime
 import time
+import os
 
 DUET_IP = '192.168.0.136'
 
@@ -81,7 +82,24 @@ def download_file(duet_ip, filepath, savepath):
 	except requests.RequestException as e:
 		print(f"Error downloading file from Duet: {e}")
 		return False
-	
+
+def upload_file(duet_ip, src_filepath, dst_filepath):
+	url = f'http://{duet_ip}/rr_upload'
+	params = {
+		'name': dst_filepath
+    }
+	with open(src_filepath, 'rb') as file:
+		data = file.read()
+
+	try:
+		connect_to_duet(duet_ip)
+		response = requests.post(url, data=data, params=params)
+		response.raise_for_status()
+		disconnect_from_duet(duet_ip)
+		return response.json()
+	except requests.RequestException as e:
+		print(f"Error uploading file to Duet: {e}")
+		return False
 
 def send_gcode_command(duet_ip, gcode):
 	url = f'http://{duet_ip}/rr_gcode'
@@ -99,10 +117,12 @@ def send_gcode_command(duet_ip, gcode):
 
 if __name__ == "__main__":
 	pass	
+	# file = os.path.join(os.path.dirname(__file__), 'test.g')
 	# print(send_gcode_command(DUET_IP, 'M115'))
 	# print(get_reply_sequence(DUET_IP))
 	# print(recieve_reply(DUET_IP))
 	# print(connect_to_duet(DUET_IP))
 	# print(get_duet_status(DUET_IP))
 	# print(download_file(DUET_IP, '/sys/heightmap.csv', 'saved_heightmap.csv'))
+	# print(upload_file(DUET_IP, file ,'/sys/test_file.gcode'))
 	# print(disconnect_from_duet(DUET_IP))
