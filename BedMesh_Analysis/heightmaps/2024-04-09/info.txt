@@ -1,0 +1,15 @@
+Heightmap Information
+Date: 2024-04-09
+Time: 15:04:42
+Number Of Scans: 10
+Probe Type: BLTouch
+Points Probed: 7:5
+Trigger Height: 2.123
+M558: M558 P9 C"^io3.in" H6 F1000 T17000 R0
+Probe Speed: M203 X5000.00 Y5000.00 Z200 E6000.00
+Probe Acceleration: M201 X2000.00 Y2000.00 Z30 
+Drive Level: NA
+Offset: NA
+Bed Material: New Metal Sheet
+
+Notes: connection Lost after 8 iterations. Final bedmesh gathered manually
