@@ -31,6 +31,7 @@ def create_info_file(save_path):
 		file.write('Trigger Height: _____' + '\n')
 		file.write('M558.1: _____' + '\n')
 		file.write('Probe Speed: _____' + '\n')
+		file.write('Probe Acceleration: _____' + '\n')
 		file.write('Drive Level: _____' + '\n')
 		file.write('Offset: _____' + '\n')
 		file.write('Bed Material: _____' + '\n')

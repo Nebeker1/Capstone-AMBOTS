@@ -8,6 +8,7 @@ Points Probed: 48
 Trigger Height: 5
 M558.1: M558.1 K1 S2.7
 Probe Speed: M203 X3000.00 Y3000.00 Z200 E6000.00
+Probe Acceleration: M201 X10000.00 Y10000.00 Z30 
 Drive Level: 20
 Offset: 166740
 Bed Material: New Metal Sheet
