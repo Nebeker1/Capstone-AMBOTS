@@ -31,7 +31,7 @@ def get_file_info(filename):
 
     lines = file.readlines()
     for index, line in enumerate(lines):
-        if "G32 K2" in line:
+        if "M98 P\"0:/sys/AMB/Macros/AMB_IRTest.g\"" in line:
             break
     
     return lines, index+1
