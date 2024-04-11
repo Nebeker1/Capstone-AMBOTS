@@ -78,7 +78,12 @@ randomPoints = []
 while now != "; prusaslicer_config = end\n":
 
     now = str(readingfile.readline())
+
+    if now[0] == "G" and now[1] == "1" and now[2] == "0":
+        now = "G10 S210 R210 P0\n"
+
     text_list.append(now)
+    
     
     if now == ";END gcode for filament\n":
         endReadingXY = True
@@ -154,6 +159,7 @@ while now != "; prusaslicer_config = end\n":
         add_location = line_number
         # Ensures add location isn't changed
         layer_change_count == 3
+        
 
 readingfile.close()
 
@@ -176,7 +182,7 @@ print("Min X value: " + str(minX))
 print("Max Y value: " + str(maxY))
 print("Min Y value: " + str(minY))
 
-bed_size = "M557 X" + str(minX) + ":" + str(maxX) + " Y" + str(minY) + ":" + str(maxY) + " P24:8"
+bed_size = "M557 X" + str(minX) + ":" + str(maxX) + " Y" + str(minY) + ":" + str(maxY) + " P8:6"
 ir_probe_text.append(bed_size)
 ir_probe_text.append("\n")
 ir_probe_text.append("G32 K2")
