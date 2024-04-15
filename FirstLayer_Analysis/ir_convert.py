@@ -185,7 +185,7 @@ print("Min Y value: " + str(minY))
 bed_size = "M557 X" + str(minX) + ":" + str(maxX) + " Y" + str(minY) + ":" + str(maxY) + " P8:6"
 ir_probe_text.append(bed_size)
 ir_probe_text.append("\n")
-ir_probe_text.append("G32 K2")
+ir_probe_text.append('M98 P"0:/sys/AMB/Macros/AMB_IRTest.g"')
 ir_probe_text.append("\n")
 
 # Define random points to scan
