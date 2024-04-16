@@ -9,42 +9,23 @@ import sys
 # Take in Original Gcode File
 read = ''
 file_original = sys.argv[1]
+file_name = file_original.split(".gcode")[0]
 
-# original file string name
-file_string = (str(file_original))
-
-# List to hold original file name with no extention
-original_list = []
-
-# Read the original file name string
-for x in range (0,len(file_string)):
-    if file_string[x] == '.':
-        break
-    original_list.append(file_string[x])
-
-# Bring original list together as a string.
-original_string = ''.join(original_list)
-
-# Add the txt extention to original file
-txt_file_name = original_string + '.txt'
-
-# Convert file based on new .txt extention
-os.rename(file_original, txt_file_name)
-
-#file_new_name = "active.txt"
-readingfile = open(txt_file_name)
+readingfile = open(file_original)
 
 # List to hold the entire original Gcode text
 text_list = []
 
 # Gcode text to run IR probe
-ir_probe_text = ["\n"]
+L1_text = []
+L2_text = []
 
 # Variable to hold number of layer changes
 layer_change_count = 0
 
 # Variable to hold add location for ir probe text
-add_location = 0
+L1_index = 0
+L2_index = 0
 
 # Current line while reading text
 now = " "
@@ -56,7 +37,6 @@ minY = 9999
 minX = 9999
 maxX = 0
 maxY = 0
-countG = 0
 
 xValue = 0
 yValue = 0
@@ -74,12 +54,12 @@ mainShape = False
 randomPoints = []
 
 
-# Read until final message line
-while now != "; prusaslicer_config = end\n":
+# Read until end of file
+while now:
 
-    now = str(readingfile.readline())
+    now = readingfile.readline()
 
-    if now[0] == "G" and now[1] == "1" and now[2] == "0":
+    if "G10" in now:
         now = "G10 S210 R210 P0\n"
 
     text_list.append(now)
@@ -149,17 +129,16 @@ while now != "; prusaslicer_config = end\n":
         minY = yValue
     
     
-    # Count Layer Change
+    # Check for layer change
     if now == ";LAYER_CHANGE\n":
         layer_change_count += 1
+        if layer_change_count == 1:
+            L1_index = line_number +2 #add 2 to account for remaining layer change comments
+        if layer_change_count == 2:
+            L2_index = line_number +2
+        print(line_number)
 
     line_number += 1
-    
-    if layer_change_count == 1:
-        add_location = line_number
-        # Ensures add location isn't changed
-        layer_change_count == 3
-        
 
 readingfile.close()
 
@@ -183,20 +162,24 @@ print("Max Y value: " + str(maxY))
 print("Min Y value: " + str(minY))
 
 bed_size = "M557 X" + str(minX) + ":" + str(maxX) + " Y" + str(minY) + ":" + str(maxY) + " P8:6"
-ir_probe_text.append(bed_size)
-ir_probe_text.append("\n")
-ir_probe_text.append('M98 P"0:/sys/AMB/Macros/AMB_IRTest.g"')
-ir_probe_text.append("\n")
+L1_text.append(f'{bed_size}\n')
+L1_text.append('M98 P"0:/sys/AMB/Macros/AMB_IRTest.g"\n')
+L1_text.append('M118 S"Preliminary Scan Complete"\n')
+L1_text.append(f'G1 X{str(maxX)} Y{str(maxY)} Z15 \n')
+L1_text.append('G30\n')
+
+L2_text.append('M98 P"0:/sys/AMB/Macros/AMB_IRTest.g"\n')
+L2_text.append('M118 S"First Layer Scan Complete"\n')
+L2_text.append('M291 R"Analysis Complete" P"Data is provided in the console.' +
+                     'Would you like to continue with the print?" K{"Yes","No"} S4\n')
+L2_text.append('if (input == 1)\n')
+L2_text.append('\tabort "aborted by user choice"\n')
 
 # Define random points to scan
 #print(randomPoints)
 
-# Return the original file back to gcode
-os.rename(txt_file_name, file_original)
-
-
 # New file name is original with additional text
-new_file_name = original_string + '_ir_convert.gcode'
+new_file_name = file_name + '_ir_convert.gcode'
 
 # Open new file to write
 write = open(new_file_name,"w")
@@ -205,16 +188,16 @@ line_number = 0
 
 # Write the text list
 for x in text_list:
-    write.write(text_list[line_number])
-
+    write.write(x)
     # If the line number is equal to the add location write the new text list
-    if line_number == add_location+2:
-        write.writelines(ir_probe_text)
-
+    if line_number == L1_index:
+        write.writelines("\n;___Begin L1 Gcode insertion___\n")
+        write.writelines(L1_text)
+        write.writelines(";___End L1 Gcode insertion___\n\n")
+    if line_number == L2_index:
+        write.writelines("\n;___Begin L2 Gcode insertion___\n")
+        write.writelines(L2_text)
+        write.writelines(";___End L2 Gcode insertion___\n\n")
     line_number += 1
 
 write.close()
-
-
-
-
