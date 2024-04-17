@@ -38,8 +38,6 @@ G29 S3 P"IR_Mesh.csv" K2
 G29 S1 P"temp.csv" 
 G29 S3 P"heightmap.csv"
 
-M472 P"temp.csv" 	; Delete temp.csv
-
 M203 X9000.00 Y9000.00 Z600 E6000.00                                                           
 
 if fileexists("0:/sys/AMB/Calibration/AMB_ScaraConfig_HotEnd.g")
