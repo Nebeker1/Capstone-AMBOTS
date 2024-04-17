@@ -1,3 +1,11 @@
-#git ignore difference.txt
-**/heightmaps/difference.txt
+#ignore generated csv and gcode files
+FirstLayer_Analysis/*.csv
+FirstLayer_Analysis/*.gcode
+!FirstLayer_Analysis/abc.gcode
 
+#ignore files from setup.py
+Capstone_AMBOTS2024.egg-info/
+
+#ignore the generated .pyc files and directory
+__pycache__/
+*.pyc
