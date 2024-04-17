@@ -165,7 +165,7 @@ bed_size = "M557 X" + str(minX) + ":" + str(maxX) + " Y" + str(minY) + ":" + str
 L1_text.append(f'{bed_size}\n')
 L1_text.append('M98 P"0:/sys/AMB/Macros/AMB_IRTest.g"\n')
 L1_text.append('M118 S"Preliminary Scan Complete"\n')
-L1_text.append(f'G1 X{str(maxX)} Y{str(maxY)} Z15 \n')
+L1_text.append(f'G1 X{str(minX)} Y{str(minY)} Z15 \n')
 L1_text.append('G30\n')
 
 L2_text.append('M98 P"0:/sys/AMB/Macros/AMB_IRTest.g"\n')
@@ -174,6 +174,8 @@ L2_text.append('M291 R"Analysis Complete" P"Data is provided in the console.' +
                      'Would you like to continue with the print?" K{"Yes","No"} S4\n')
 L2_text.append('if (input == 1)\n')
 L2_text.append('\tabort "aborted by user choice"\n')
+L2_text.append(f'G1 X{str(minX)} Y{str(minY)} Z15 \n')
+L2_text.append('G30\n')
 
 # Define random points to scan
 #print(randomPoints)
