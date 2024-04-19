@@ -162,6 +162,7 @@ print("Max Y value: " + str(maxY))
 print("Min Y value: " + str(minY))
 
 bed_size = "M557 X" + str(minX) + ":" + str(maxX) + " Y" + str(minY) + ":" + str(maxY) + " P8:6"
+L1_text.append('var loopControl = 0\n')
 L1_text.append(f'{bed_size}\n')
 L1_text.append('M98 P"0:/sys/AMB/Macros/AMB_IRTest.g"\n')
 L1_text.append('M118 S"Preliminary Scan Complete"\n')
@@ -170,8 +171,8 @@ L1_text.append('G30\n')
 
 L2_text.append('M98 P"0:/sys/AMB/Macros/AMB_IRTest.g"\n')
 L2_text.append('M118 S"First Layer Scan Complete"\n')
-L2_text.append('M291 R"Analysis Complete" P"Data is provided in the console.' +
-                     'Would you like to continue with the print?" K{"Yes","No"} S4\n')
+L2_text.append('M400\n')
+L2_text.append('M291 R"First Layer Scan Complete" P"Press OK to continue" S3 T5')
 L2_text.append('if (input == 1)\n')
 L2_text.append('\tabort "aborted by user choice"\n')
 L2_text.append(f'G1 X{str(minX)} Y{str(minY)} Z15 \n')

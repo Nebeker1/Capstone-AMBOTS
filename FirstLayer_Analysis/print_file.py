@@ -7,34 +7,9 @@ import sys
 import time
 import os
 
-from BedMesh_Analysis.duet_http import send_gcode_command, get_duet_status, upload_file, get_reply_sequence, recieve_reply, download_file
+from BedMesh_Analysis.duet_http import send_gcode_command, upload_file, get_reply_sequence, recieve_reply, download_file
 
 DUET_IP = '192.168.0.136'
-
-def write_new_file(lines, index, new_filename):
-    m291_command = "M291 P\"Do you wish to continue the print?\" R\"Duet3D Print\" S3\n"
-    try:
-        new_file = open(new_filename, 'w')
-        new_file.writelines(lines[:index])
-        new_file.writelines(m291_command)
-        new_file.writelines(lines[index:])
-    except:
-        print("ERROR: Could not write new files.")
-        sys.exit(0)
-
-def get_file_info(filename):
-    try:
-        file = open(filename, 'r')
-    except:
-        print("ERROR: Could not find file with name <" + filename + ">.")
-        sys.exit(0)
-
-    lines = file.readlines()
-    for index, line in enumerate(lines):
-        if "M98 P\"0:/sys/AMB/Macros/AMB_IRTest.g\"" in line:
-            break
-    
-    return lines, index+1
 
 def generate_first_layer_info(prelim_scan_filepath, first_layer_scan_filepath):
     # Open the preliminary scan file
@@ -53,7 +28,8 @@ def generate_first_layer_info(prelim_scan_filepath, first_layer_scan_filepath):
     prelim_mean = float((prelim_info[3])[6:]) 
     first_layer_mean = float((first_layer_info[3])[6:])
 
-    return f'difference between means: {first_layer_mean - prelim_mean} mm'
+    #return answer to 3 decimals
+    return f'difference between means: {(first_layer_mean - prelim_mean):.3f} mm'
 
 if __name__ == "__main__":
     filename = ""
@@ -93,6 +69,7 @@ if __name__ == "__main__":
             elif 'First Layer Scan Complete' in response:
                 download_file(DUET_IP, '/sys/IR_Mesh.csv',  os.path.join(os.path.dirname(__file__), 'first_layer.csv'))
                 info = generate_first_layer_info(prelim_scan_filepath, first_layer_scan_filepath)
-                send_gcode_command(DUET_IP, f'M118 P0 S"info: {info}" L1')
+                send_gcode_command(DUET_IP, f'M291 R"Analysis Complete" P"Data: {info}.' +
+                     'Would you like to continue with the print?" K{"Yes","No"} S4\n')
                 print('program complete')
                 break
