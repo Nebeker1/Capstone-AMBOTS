@@ -8,6 +8,8 @@
 
 - [Installation](#installation)
 - [Usage](#usage)
+- [Authors](#authors)
+- [Acknowledgements](#acknowledgements)
 
 ## Installation
 
@@ -26,4 +28,15 @@ Once you have Python 3 installed, you can follow these steps to install and use 
 ## Usage
 
 [TODO]
+
+## Authors 
+- Waeland Elder
+- Ryan Espejo
+- Jarrett Hobbs
+- Joshua Hollis
+- Kaden Nebeker
+
+## Acknowledgements 
+Thank you to our sponsors at AMBOTS, and Dr. Patitz at University of Arkansas
+
 
