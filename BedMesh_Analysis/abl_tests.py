@@ -5,10 +5,11 @@ import datetime
 import time
 import os
 
-DUET_IP = '192.168.0.136'
+DUET_IP = '192.168.0.106'
 
 SZP_ABL_CMD = 'G32 K1'
 BLTOUCH_ABL_CMD = 'G32 K0'
+IR_ABL_CMD = 'G32 K2'
 ITERATIONS = 10
 
 def check_connection(duet_ip):
@@ -139,8 +140,10 @@ if __name__ == "__main__":
 		save_path = create_save_path()
 		if save_path is not None:
 			for i in range(ITERATIONS):
-				perform_abl(DUET_IP, SZP_ABL_CMD, save_path, i)
+				# perform_abl(DUET_IP, SZP_ABL_CMD, save_path, i)
 				# perform_abl(DUET_IP, BLTOUCH_ABL_CMD, save_path, i)
-			data_analysis(save_path)
+				# perform_abl(DUET_IP, IR_ABL_CMD, save_path, i)
+				pass
+			data_analysis(os.path.join(os.path.dirname(__file__), f'heightmaps/2024-04-18'))
 	else:
 		sys.exit(1)

@@ -6,7 +6,7 @@ from duet_http import send_gcode_command, get_duet_status
 import sys
 import time
 
-DUET_IP = '192.168.0.136'
+DUET_IP = '192.168.0.106'
 
 def check_connection(duet_ip):
     if get_duet_status(duet_ip) is None:

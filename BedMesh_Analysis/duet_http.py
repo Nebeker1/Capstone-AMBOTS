@@ -7,7 +7,7 @@ import datetime
 import time
 import os
 
-DUET_IP = '192.168.0.136'
+DUET_IP = '192.168.0.106'
 
 def connect_to_duet(duet_ip):
 	# Get the current time in the format the Duet expects

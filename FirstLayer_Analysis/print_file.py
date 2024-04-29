@@ -9,7 +9,7 @@ import os
 
 from BedMesh_Analysis.duet_http import send_gcode_command, upload_file, get_reply_sequence, recieve_reply, download_file
 
-DUET_IP = '192.168.0.136'
+DUET_IP = '192.168.0.106'
 
 def generate_first_layer_info(prelim_scan_filepath, first_layer_scan_filepath):
     # Open the preliminary scan file
