@@ -2,7 +2,7 @@
 
 ## Description
 
-[TODO]
+Our goal is to use 3D vision tools as a way to monitor and perform automation tasks in 3D printing. To accomplish this, we utilize a Duet3D IR Probe infrared sensor and a Duet3D Scanning Z Probe inductive sensor to perform the tasks of first-layer analysis and automatic bed leveling. This GitHub repository contains files to configure each sensor for use as well as files that will use the sensors for ABL and first-layer analysis.
 
 ## Table of Contents
 
