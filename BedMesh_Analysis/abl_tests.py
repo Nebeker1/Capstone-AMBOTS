@@ -140,10 +140,10 @@ if __name__ == "__main__":
 		save_path = create_save_path()
 		if save_path is not None:
 			for i in range(ITERATIONS):
-				# perform_abl(DUET_IP, SZP_ABL_CMD, save_path, i)
+				perform_abl(DUET_IP, SZP_ABL_CMD, save_path, i)
 				# perform_abl(DUET_IP, BLTOUCH_ABL_CMD, save_path, i)
 				# perform_abl(DUET_IP, IR_ABL_CMD, save_path, i)
 				pass
-			data_analysis(os.path.join(os.path.dirname(__file__), f'heightmaps/2024-04-18'))
+			data_analysis(save_path)
 	else:
 		sys.exit(1)
